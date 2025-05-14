@@ -4,7 +4,7 @@ import clips
 import streamlit as st
 
 
-os.chdir("D:\\Personel\\Projects Anne\\indentERB")
+# os.chdir("D:\\Personel\\Projects Anne\\indentERB")
 
 # Identify a ruby template tag in a line
 def getTag(s_):
