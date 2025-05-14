@@ -4,7 +4,7 @@ import clips
 import streamlit as st
 
 
-# os.chdir("D:\\Personel\\Projects Anne\\indentERB")
+os.chdir("D:\\Personel\\Projects Anne\\indentERB")
 
 # Identify a ruby template tag in a line
 def getTag(s_):
@@ -44,7 +44,8 @@ def getKw(s_):
     wd = s.split()
     if s.startswith("#"): return("")
     if len(wd) >= 2:
-        if (wd[0] == "<%-" or wd[0] == "<%-") and wd[1] == "#": return("")
+        if (wd[0] == "<%" or wd[0] == "<%-") and wd[1] == "#": return("")
+        if wd[0] == "<%#" or wd[0] == "<%-#": return("")
     if "next" in wd and "if" in wd: return("")
     if "break" in wd and "if" in wd: return("")
     if "if" in wd: return("if")
@@ -54,6 +55,7 @@ def getKw(s_):
     elif "elsif" in wd: return("elsif")
     elif "end" in wd: return("end")
     else: return("")
+ 
  
 # Update tags with open and close extrapolation 
 def extrapolateTags(tags):
@@ -286,6 +288,7 @@ if st.button("Validate"):
 
         # Run
         env.run()
+        st.write("No issue.")
 
         # Check results
         leftovers = [i for i in env.facts()]
@@ -293,7 +296,7 @@ if st.button("Validate"):
             wd = str(i)[1:-1].split()
             st.write(f"Line {int(wd[1]) + 1} : {wd[2]}")
 
-        if len(leftovers) != 0: st.stop()
+        #if len(leftovers) != 0: st.stop()
         
         # Indent code
         newIndentText = showIndentedCode(lines,newtags2,0)
