@@ -4,7 +4,7 @@ import clips
 import streamlit as st
 
 
-#os.chdir("D:\\Personel\\Projects Anne\\indentERB")
+# os.chdir("D:\\Personel\\Projects Anne\\indentERB")
 
 # Identify a ruby template tag in a line
 def getTag(s_):
@@ -146,9 +146,13 @@ def showIndentedCode(lines,tags,trace):
                         print(indent*indentC + curline)
                         codes.append(indent*indentC + curline)
                         indentC+=1
-                        if trace: 
-                            print(indent*indentC + f"puts \"---> {cnt}\"")
-                            codes.append(indent*indentC + f"puts \"---> {cnt}\"")
+                        if trace:
+                            if v[1] == 'O' or v[1] == 'I':
+                                print(indent*indentC + f"puts \"---> {cnt}\"")
+                                codes.append(indent*indentC + f"puts \"---> {cnt}\"")
+                            else:
+                                print(indent*indentC + f"<%- puts \"---> {cnt}\" -%>")
+                                codes.append(indent*indentC + f"<%- puts \"---> {cnt}\" -%>")
                             cnt+=1
                         
                     case 'else' | 'elsif':
@@ -156,7 +160,13 @@ def showIndentedCode(lines,tags,trace):
                         codes.append(indent*(indentC-1) + curline)
                         if trace: 
                             print(indent*indentC + f"puts \"---> {cnt}\"")
-                            codes.append(indent*indentC + f"puts \"---> {cnt}\"")
+                            if v[1] == 'O' or v[1] == 'I':
+                                print(indent*indentC + f"puts \"---> {cnt}\"")
+                                codes.append(indent*indentC + f"puts \"---> {cnt}\"")
+                            else:
+                                print(indent*indentC + f"<%- puts \"---> {cnt}\" -%>")
+                                codes.append(indent*indentC + f"<%- puts \"---> {cnt}\" -%>")
+                            #codes.append(indent*indentC + f"puts \"---> {cnt}\"")
                             cnt+=1
                     case 'end':
                         indentC+=-1
