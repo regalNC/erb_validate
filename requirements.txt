@@ -1,3 +1,2 @@
 streamlit
-scapy
-pandas
+clips
