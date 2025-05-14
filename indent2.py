@@ -46,6 +46,7 @@ def getKw(s_):
     if len(wd) >= 2:
         if (wd[0] == "<%-" or wd[0] == "<%-") and wd[1] == "#": return("")
     if "next" in wd and "if" in wd: return("")
+    if "break" in wd and "if" in wd: return("")
     if "if" in wd: return("if")
     elif "do" in wd: return("do")
     elif "begin" in wd: return("begin")
