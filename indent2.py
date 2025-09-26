@@ -302,7 +302,7 @@ if st.button("Validate"):
         # Assert facts
         assertTags(newtags2)
         initfacts = [i for i in env.facts()]
-        st.write(initfacts)
+        #st.write(initfacts)
 
         # Run
         env.run()
@@ -328,5 +328,6 @@ if st.button("Validate"):
                 
         st.stop()
 # Indent code
+
 
 
