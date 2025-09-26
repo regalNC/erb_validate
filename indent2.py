@@ -314,7 +314,12 @@ if st.button("Validate"):
             st.write("Unbalanced tag(s)")
             for i in leftovers:
                 wd = str(i)[1:-1].split()
-                st.write(f"Line {int(wd[1]) + 1} : {wd[2]}")
+                if wd[2] in ['begin','if','do','else']:
+                    st.write(f"Missing a 'end' after line {int(wd[1]) + 1}")
+                elif wd[2] in ['end']:
+                    st.write(f"Extra 'end' before line {int(wd[1]) + 1}")
+                else:
+                    st.write(f"Line {int(wd[1]) + 1} : {wd[2]}")
         else:
             st.write("No issue")
 
@@ -331,6 +336,7 @@ if st.button("Validate"):
                 
         st.stop()
 # Indent code
+
 
 
 
