@@ -310,10 +310,14 @@ if st.button("Validate"):
 
         # Check results
         leftovers = [i for i in env.facts()]
-        st.write(leftovers)
-        for i in leftovers:
-            wd = str(i)[1:-1].split()
-            st.write(f"Line {int(wd[1]) + 1} : {wd[2]}")
+        #st.write(leftovers)
+        if len(leftovers) > 0:
+            st.write("Unbalanced tag(s)")
+            for i in leftovers:
+                wd = str(i)[1:-1].split()
+                st.write(f"Line {int(wd[1]) + 1} : {wd[2]}")
+        else:
+            st.write("No issue")
 
         #if len(leftovers) != 0: st.stop()
         
@@ -328,6 +332,7 @@ if st.button("Validate"):
                 
         st.stop()
 # Indent code
+
 
 
 
