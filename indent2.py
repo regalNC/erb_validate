@@ -2,7 +2,7 @@
 import os
 import clips
 import streamlit as st
-
+import re
 
 # os.chdir("D:\\Personel\\Projects Anne\\indentERB")
 
@@ -94,7 +94,7 @@ def updateTagsWithKeywords(tags):
             newtags.append((i,v,""))
         else:
             kw = getKw(lines[i])
-            print(kw,lines[i])
+            #print(kw,lines[i])
             newtags.append((i,v,kw))
     return(newtags)
 
@@ -138,42 +138,42 @@ def showIndentedCode(lines,tags,trace):
         #    pdb.set_trace()
         match v[1]:
             case '':
-                print(indent*indentC + curline)
+                #print(indent*indentC + curline)
                 codes.append(indent*indentC + curline)
             case 'OC' | 'O' | 'I' | 'C':
                 match v[2]:
                     case 'if' | 'do' | 'begin':
-                        print(indent*indentC + curline)
+                        #print(indent*indentC + curline)
                         codes.append(indent*indentC + curline)
                         indentC+=1
                         if trace:
                             if v[1] == 'O' or v[1] == 'I':
-                                print(indent*indentC + f"puts \"---> {cnt}\"")
+                                #print(indent*indentC + f"puts \"---> {cnt}\"")
                                 codes.append(indent*indentC + f"puts \"---> {cnt}\"")
                             else:
-                                print(indent*indentC + f"<%- puts \"---> {cnt}\" -%>")
+                                #print(indent*indentC + f"<%- puts \"---> {cnt}\" -%>")
                                 codes.append(indent*indentC + f"<%- puts \"---> {cnt}\" -%>")
                             cnt+=1
                         
                     case 'else' | 'elsif':
-                        print(indent*(indentC-1) + curline)
+                        #print(indent*(indentC-1) + curline)
                         codes.append(indent*(indentC-1) + curline)
                         if trace: 
-                            print(indent*indentC + f"puts \"---> {cnt}\"")
+                            #print(indent*indentC + f"puts \"---> {cnt}\"")
                             if v[1] == 'O' or v[1] == 'I':
-                                print(indent*indentC + f"puts \"---> {cnt}\"")
+                                #print(indent*indentC + f"puts \"---> {cnt}\"")
                                 codes.append(indent*indentC + f"puts \"---> {cnt}\"")
                             else:
-                                print(indent*indentC + f"<%- puts \"---> {cnt}\" -%>")
+                                #print(indent*indentC + f"<%- puts \"---> {cnt}\" -%>")
                                 codes.append(indent*indentC + f"<%- puts \"---> {cnt}\" -%>")
                             #codes.append(indent*indentC + f"puts \"---> {cnt}\"")
                             cnt+=1
                     case 'end':
                         indentC+=-1
-                        print(indent*indentC + curline)
+                        #print(indent*indentC + curline)
                         codes.append(indent*indentC + curline)
                     case '': # open or close not keyword
-                        print(indent*indentC + curline)
+                        #print(indent*indentC + curline)
                         codes.append(indent*indentC + curline)
                         
     return("\n".join(codes))                
@@ -215,7 +215,7 @@ r9 = """
     (test (= 1 (- ?seq3 ?seq2)))
     (test (= 1 (- ?seq4 ?seq3)))
  =>
-    (println "R7 Found if elsif else end at " ?lineno1)
+    (println "R9 Found if elsif else end at " ?lineno1)
     (retract ?f1 ?f2 ?f3 ?f4)
     (cc)
 
@@ -227,7 +227,7 @@ r10 = """
     ?f2 <- (s1 ?lineno2 end ?seq2)
     (test (= 1 (- ?seq2 ?seq1)))
  =>
-    (println "R7 Found do end at " ?lineno1)
+    (println "R10 Found do end at " ?lineno1)
     (retract ?f1 ?f2)
     (cc)
 
@@ -262,16 +262,22 @@ if st.button("Validate"):
         st.warning('The template is empty', icon="⚠️")
         st.stop()
     else:
+        import re
+        
+        template_text = re.sub(pattern="<%-(?!\\s)",string=template_text,repl="<%- ")
         lines = template_text.split("\n")
 
         # Generate ruby tags sequence on specific lines
         tags = getTags(lines)
+        st.write(tags)
 
         # Extrapolate ruby tags between open and close tags
         newtags = extrapolateTags(tags)
-
+        st.write(newtags)
+        
         # Create final tag list with line number and block keyword for clips parsing    
         newtags2 = updateTagsWithKeywords(newtags)
+        st.write(newtags2)
                 
         # Initialize CLIPS
         env = clips.Environment()
@@ -295,6 +301,8 @@ if st.button("Validate"):
 
         # Assert facts
         assertTags(newtags2)
+        initfacts = [i for i in env.facts()]
+        st.write(initfacts)
 
         # Run
         env.run()
@@ -302,6 +310,7 @@ if st.button("Validate"):
 
         # Check results
         leftovers = [i for i in env.facts()]
+        st.write(leftovers)
         for i in leftovers:
             wd = str(i)[1:-1].split()
             st.write(f"Line {int(wd[1]) + 1} : {wd[2]}")
