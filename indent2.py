@@ -269,15 +269,15 @@ if st.button("Validate"):
 
         # Generate ruby tags sequence on specific lines
         tags = getTags(lines)
-        st.write(tags)
+        #st.write(tags)
 
         # Extrapolate ruby tags between open and close tags
         newtags = extrapolateTags(tags)
-        st.write(newtags)
+        #st.write(newtags)
         
         # Create final tag list with line number and block keyword for clips parsing    
         newtags2 = updateTagsWithKeywords(newtags)
-        st.write(newtags2)
+        #st.write(newtags2)
                 
         # Initialize CLIPS
         env = clips.Environment()
@@ -328,4 +328,5 @@ if st.button("Validate"):
                 
         st.stop()
 # Indent code
+
 
