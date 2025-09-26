@@ -306,7 +306,6 @@ if st.button("Validate"):
 
         # Run
         env.run()
-        st.write("No issue.")
 
         # Check results
         leftovers = [i for i in env.facts()]
@@ -332,6 +331,7 @@ if st.button("Validate"):
                 
         st.stop()
 # Indent code
+
 
 
 
